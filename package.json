@@ -1,0 +1,31 @@
+{
+  "name": "react-native-socket-mobile",
+  "version": "0.0.1",
+  "description": "React Native Socket Mobile for https://www.socketmobile.com/developers",
+  "author": "Ferran Negre <fnp.developer@gmail.com>",
+  "main": "index.js",
+  "homepage": "https://github.com/Traede/react-native-socket-mobile",
+  "license": "MIT",
+  "files": [
+    "ios/",
+    "index.js"
+  ],
+  "scripts": {
+    "start": "react-native start",
+    "lint": "eslint .",
+    "flow": "flow"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
+  },
+  "devDependencies": {
+    "babel-preset-react-native": "4.0.0",
+    "eslint": "^4.19.1",
+    "eslint-config-callstack-io": "^1.1.1",
+    "flow-bin": "0.65.0",
+    "jest": "22.4.3",
+    "react": "^16.3.0-alpha.1",
+    "react-native": "0.54.2"
+  }
+}

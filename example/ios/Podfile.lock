@@ -1,0 +1,33 @@
+PODS:
+  - React (0.54.2):
+    - React/Core (= 0.54.2)
+  - React/Core (0.54.2):
+    - yoga (= 0.54.2.React)
+  - ReactNativeSocketMobile (0.0.1):
+    - React
+    - SKTCaptureObjC (~> 1.0)
+  - SKTCaptureObjC (1.0.67)
+  - yoga (0.54.2.React)
+
+DEPENDENCIES:
+  - React (from `../../node_modules/react-native`)
+  - ReactNativeSocketMobile (from `../../ios`)
+  - yoga (from `../../node_modules/react-native/ReactCommon/yoga/yoga.podspec`)
+
+EXTERNAL SOURCES:
+  React:
+    :path: ../../node_modules/react-native
+  ReactNativeSocketMobile:
+    :path: ../../ios
+  yoga:
+    :path: ../../node_modules/react-native/ReactCommon/yoga/yoga.podspec
+
+SPEC CHECKSUMS:
+  React: c237e42de9c70e5cac6eeb52b4cfd3a0910c1f00
+  ReactNativeSocketMobile: 4f29c3e513f5f4ec51059084d11314eed4cd1f25
+  SKTCaptureObjC: 48b12c0fc67ead79105a86eb152f130b6c843e2d
+  yoga: 55da126afc384965b96bff46652464373b330add
+
+PODFILE CHECKSUM: 8be6dd84e8bc543d970e11c6b686d11acd7cf952
+
+COCOAPODS: 1.4.0
