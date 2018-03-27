@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, { Component } from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { Alert, Button, StyleSheet, Text, View } from 'react-native';
 // eslint-disable-next-line import/no-unresolved
 import SocketMobile from 'react-native-socket-mobile';
 
@@ -42,7 +42,12 @@ export default class App extends Component<Props, State> {
   stopListening = async () => {
     this.setState({ isBusy: true });
     await SocketMobile.stop();
-    this.setState({ isBusy: false, started: false, lastScan: '' });
+    this.setState({ isBusy: false, started: false, lastScan: '--' });
+  };
+
+  checkStatus = async () => {
+    const status = await SocketMobile.updateStatusFromDevices();
+    Alert.alert('Status', status);
   };
 
   render() {
@@ -59,11 +64,11 @@ export default class App extends Component<Props, State> {
             }
           }}
         />
-        <Button
-          title="Check status"
-          onPress={() => SocketMobile.updateStatusFromDevices()}
-        />
-        <Text style={styles.data}>{this.state.lastScan}</Text>
+        <Button title="Check status" onPress={this.checkStatus} />
+        <Text style={styles.info}>{`Status: ${
+          this.state.started ? 'Connected' : 'Disconnected'
+        }`}</Text>
+        <Text style={styles.info}>{`Code: ${this.state.lastScan}`}</Text>
       </View>
     );
   }
@@ -76,8 +81,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
-  data: {
-    fontSize: 20,
+  info: {
+    fontSize: 16,
     marginTop: 16,
   },
 });

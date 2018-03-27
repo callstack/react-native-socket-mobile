@@ -26,9 +26,8 @@ const stop = () => {
   return ReactNativeSocketMobile.stop();
 };
 
-const updateStatusFromDevices = () => {
+const updateStatusFromDevices = () =>
   ReactNativeSocketMobile.updateStatusFromDevices();
-};
 
 const setDataListener = (callback: (result: { data: string }) => void) => {
   emitter.addListener(DECODED_DATA_LISTENER, callback);
