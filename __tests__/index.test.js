@@ -64,16 +64,13 @@ describe('Socket Mobile module', () => {
     );
   });
 
-  test('calls stop and remove necessary listeners', async () => {
-    expect(emitter.removeAllListeners).not.toBeCalled();
+  test('calls stop', async () => {
     expect(ReactNativeSocketMobile.stop).not.toBeCalled();
 
     const response = await SocketMobile.stop();
 
     expect(response).toBe(true);
     expect(ReactNativeSocketMobile.stop).toHaveBeenCalledTimes(1);
-    expect(emitter.removeAllListeners).toHaveBeenCalledTimes(1);
-    expect(emitter.removeAllListeners).toBeCalledWith('DecodedData');
   });
 
   test('calls updateStatusFromDevices', async () => {
@@ -109,14 +106,20 @@ describe('Socket Mobile module', () => {
 
     expect(callback).toHaveBeenCalledTimes(1);
     expect(callback).toBeCalledWith('disconnected');
-    expect(emitter.removeAllListeners).toHaveBeenCalledTimes(1);
-    expect(emitter.removeAllListeners).toBeCalledWith('StatusDeviceChanged');
 
     emitter.testTrigger('StatusDeviceChanged', { status: 'connected' });
 
     expect(callback).toHaveBeenCalledTimes(2);
     expect(callback).toBeCalledWith('connected');
-    expect(emitter.removeAllListeners).toHaveBeenCalledTimes(1);
+  });
+
+  it('removes all listeners', () => {
+    expect(emitter.removeAllListeners).toHaveBeenCalledTimes(0);
+
+    SocketMobile.clearAllListeners();
+
+    expect(emitter.removeAllListeners).toHaveBeenCalledTimes(2);
+    expect(emitter.removeAllListeners).toBeCalledWith('DecodedData');
     expect(emitter.removeAllListeners).toBeCalledWith('StatusDeviceChanged');
   });
 });

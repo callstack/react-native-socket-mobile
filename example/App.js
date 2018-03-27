@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { Alert, Button, StyleSheet, Text, View } from 'react-native';
 // eslint-disable-next-line import/no-unresolved
-import SocketMobile from 'react-native-socket-mobile';
+import SocketMobile, { STATUS_WAITING } from 'react-native-socket-mobile';
 
 import { bundleId, appKey, developerId } from './secrets';
 
@@ -11,38 +11,65 @@ type Props = {};
 
 type State = {
   isBusy: boolean,
-  started: boolean,
   lastScan: string,
+  status: string,
 };
 
 export default class App extends Component<Props, State> {
   state = {
     isBusy: false,
-    started: false,
     lastScan: '--',
+    status: 'disconnected',
+  };
+
+  componentDidMount() {
+    this.initStatus();
+  }
+
+  componentWillUnmount() {
+    SocketMobile.clearAllListeners();
+  }
+
+  initStatus = async () => {
+    const status = await SocketMobile.updateStatusFromDevices();
+    if (status !== STATUS_WAITING) {
+      this.setState({ status: 'connected ' });
+      this.setListeners();
+    }
   };
 
   startListening = async () => {
-    SocketMobile.setDeviceStatusListener(status => {
-      if (status === 'connected') {
-        SocketMobile.setDataListener(({ data }) => {
-          this.setState({ lastScan: data });
-        });
-      }
-    });
+    this.setListeners();
+
     this.setState({ isBusy: true });
     await SocketMobile.start({
       bundleId,
       developerId,
       appKey,
     });
-    this.setState({ isBusy: false, started: true });
+    this.setState({ isBusy: false });
   };
 
   stopListening = async () => {
     this.setState({ isBusy: true });
+
     await SocketMobile.stop();
-    this.setState({ isBusy: false, started: false, lastScan: '--' });
+    SocketMobile.clearAllListeners();
+
+    this.setState({ isBusy: false, lastScan: '--' });
+  };
+
+  setListeners = () => {
+    SocketMobile.setDeviceStatusListener(status => {
+      if (status === 'connected') {
+        this.setState({ status: 'connected' });
+      } else {
+        this.setState({ status: 'disconnected' });
+      }
+    });
+    SocketMobile.setDataListener(({ data }) => {
+      this.setState({ lastScan: data });
+    });
   };
 
   checkStatus = async () => {
@@ -55,9 +82,13 @@ export default class App extends Component<Props, State> {
       <View style={styles.container}>
         <Button
           disabled={this.state.isBusy}
-          title={!this.state.started ? 'Start' : 'Stop'}
+          title={
+            this.state.isBusy
+              ? 'Busy...'
+              : this.state.status === 'disconnected' ? 'Start' : 'Stop'
+          }
           onPress={() => {
-            if (!this.state.started) {
+            if (this.state.status === 'disconnected') {
               this.startListening();
             } else {
               this.stopListening();
@@ -65,9 +96,9 @@ export default class App extends Component<Props, State> {
           }}
         />
         <Button title="Check status" onPress={this.checkStatus} />
-        <Text style={styles.info}>{`Status: ${
-          this.state.started ? 'Connected' : 'Disconnected'
-        }`}</Text>
+        <Text style={styles.info}>{`Status: ${this.state.status
+          .charAt(0)
+          .toUpperCase() + this.state.status.slice(1)}`}</Text>
         <Text style={styles.info}>{`Code: ${this.state.lastScan}`}</Text>
       </View>
     );

@@ -1,3 +1,6 @@
 {
-  "extends": "callstack-io"
+  "extends": "callstack-io",
+  "rules": {
+    "no-nested-ternary": 0
+  }
 }

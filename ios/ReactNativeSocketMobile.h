@@ -2,6 +2,6 @@
 #import <React/RCTEventEmitter.h>
 #import "SktCaptureHelper.h"
 
-@interface ReactNativeSocketMobile : RCTEventEmitter <RCTBridgeModule, SKTCaptureHelperDelegate>
+@interface ReactNativeSocketMobile : RCTEventEmitter<RCTBridgeModule, SKTCaptureHelperDelegate>
 
 @end

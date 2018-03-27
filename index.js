@@ -9,6 +9,8 @@ export const emitter = new NativeEventEmitter(ReactNativeSocketMobile);
 const DECODED_DATA_LISTENER = 'DecodedData';
 const STATUS_DEVICE_LISTENER = 'StatusDeviceChanged';
 
+export const STATUS_WAITING = 'Waiting for a scanner...';
+
 type ParamsType = {
   bundleId: string,
   developerId: string,
@@ -22,10 +24,7 @@ const start = (params: ParamsType) => {
   return ReactNativeSocketMobile.start(bundleId, developerId, appKey);
 };
 
-const stop = () => {
-  emitter.removeAllListeners(DECODED_DATA_LISTENER);
-  return ReactNativeSocketMobile.stop();
-};
+const stop = () => ReactNativeSocketMobile.stop();
 
 const updateStatusFromDevices = () =>
   ReactNativeSocketMobile.updateStatusFromDevices();
@@ -37,13 +36,16 @@ const setDataListener = (callback: (result: { data: string }) => void) => {
 const setDeviceStatusListener = (callback: (status: StatusType) => void) => {
   emitter.addListener(STATUS_DEVICE_LISTENER, ({ status }) => {
     callback(status);
-    if (status === 'disconnected') {
-      emitter.removeAllListeners(STATUS_DEVICE_LISTENER);
-    }
   });
 };
 
+const clearAllListeners = () => {
+  emitter.removeAllListeners(DECODED_DATA_LISTENER);
+  emitter.removeAllListeners(STATUS_DEVICE_LISTENER);
+};
+
 export default {
+  clearAllListeners,
   start,
   stop,
   setDataListener,

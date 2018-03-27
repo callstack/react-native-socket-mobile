@@ -8,12 +8,19 @@ NSString *DecodedData = @"DecodedData";
 NSString *StatusDeviceChanged = @"StatusDeviceChanged";
 bool hasListeners;
 
++ (id)allocWithZone:(NSZone *)zone {
+    static ReactNativeSocketMobile *sharedInstance = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedInstance = [super allocWithZone:zone];
+    });
+    return sharedInstance;
+}
+
 - (NSArray<NSString *> *)supportedEvents
 {
     return @[DecodedData, StatusDeviceChanged];
 }
-
-SKTCaptureHelper* _capture;
 
 -(void)startObserving {
     hasListeners = YES;
@@ -25,22 +32,26 @@ SKTCaptureHelper* _capture;
 
 RCT_EXPORT_METHOD(start:(NSString *)bundleId:(NSString *)developerId:(NSString *)appKey resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
-    _capture = [SKTCaptureHelper sharedInstance];
-    [_capture pushDelegate:self];
+    __weak typeof(self) weakSelf = self;
+    SKTCaptureHelper* capture = [SKTCaptureHelper sharedInstance];
+    [capture pushDelegate:weakSelf];
     
     SKTAppInfo* appInfo = [SKTAppInfo new];
     appInfo.BundleID = bundleId;
     appInfo.DeveloperID = developerId;
     appInfo.AppKey = appKey;
     
-    [_capture openWithAppInfo:appInfo completionHandler:^(SKTResult result) {
+    [capture openWithAppInfo:appInfo completionHandler:^(SKTResult result) {
         resolve(@YES);
     }];
 }
 
 RCT_EXPORT_METHOD(stop: (RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
-    [_capture closeWithCompletionHandler :^(SKTResult result) {
+    __weak typeof(self) weakSelf = self;
+    SKTCaptureHelper* capture = [SKTCaptureHelper sharedInstance];
+    [capture popDelegate:weakSelf];
+    [capture closeWithCompletionHandler :^(SKTResult result) {
         resolve(@YES);
     }];
 }
@@ -65,7 +76,8 @@ RCT_EXPORT_METHOD(stop: (RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseReje
 
 RCT_EXPORT_METHOD(updateStatusFromDevices: (RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
-    NSArray* devices = [_capture getDevicesList];
+    SKTCaptureHelper* capture = [SKTCaptureHelper sharedInstance];
+    NSArray* devices = [capture getDevicesList];
     NSString* newStatus = @"";
     if (devices.count == 0 ){
         newStatus = @"Waiting for a scanner...";
