@@ -58,3 +58,6 @@ buck-out/
 
 # example
 example/secrets.js
+
+# Jest
+coverage/

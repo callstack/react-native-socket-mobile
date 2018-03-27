@@ -13,7 +13,8 @@
   "scripts": {
     "start": "react-native start",
     "lint": "eslint .",
-    "flow": "flow"
+    "flow": "flow",
+    "test": "jest"
   },
   "peerDependencies": {
     "react": "*",
@@ -27,5 +28,8 @@
     "jest": "22.4.3",
     "react": "^16.3.0-alpha.1",
     "react-native": "0.54.2"
+  },
+  "jest": {
+    "preset": "react-native"
   }
 }

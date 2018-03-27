@@ -3,7 +3,8 @@
 import { NativeEventEmitter, NativeModules } from 'react-native';
 
 const { ReactNativeSocketMobile } = NativeModules;
-const emitter = new NativeEventEmitter(ReactNativeSocketMobile);
+// Exported only for test purposes
+export const emitter = new NativeEventEmitter(ReactNativeSocketMobile);
 
 const DECODED_DATA_LISTENER = 'DecodedData';
 const STATUS_DEVICE_LISTENER = 'StatusDeviceChanged';
