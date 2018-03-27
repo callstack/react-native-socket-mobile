@@ -1,6 +1,4 @@
 #import "ReactNativeSocketMobile.h"
-#import <React/RCTLog.h>
-#import "SktCaptureHelper.h"
 
 @implementation ReactNativeSocketMobile
 
@@ -8,6 +6,7 @@ RCT_EXPORT_MODULE();
 
 NSString *DecodedData = @"DecodedData";
 NSString *StatusDeviceChanged = @"StatusDeviceChanged";
+bool hasListeners;
 
 - (NSArray<NSString *> *)supportedEvents
 {
@@ -15,6 +14,14 @@ NSString *StatusDeviceChanged = @"StatusDeviceChanged";
 }
 
 SKTCaptureHelper* _capture;
+
+-(void)startObserving {
+    hasListeners = YES;
+}
+
+-(void)stopObserving {
+    hasListeners = NO;
+}
 
 RCT_EXPORT_METHOD(start:(NSString *)bundleId:(NSString *)developerId:(NSString *)appKey resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
@@ -39,28 +46,24 @@ RCT_EXPORT_METHOD(stop: (RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseReje
 }
 
 -(void)didReceiveDecodedData:(SKTCaptureDecodedData*) decodedData fromDevice:(SKTCaptureHelperDevice*) device withResult:(SKTResult) result{
-    if (SKTSUCCESS(result)) {
+    if (SKTSUCCESS(result) && hasListeners) {
         [self sendEventWithName:DecodedData body:@{@"data": [NSString stringWithUTF8String:(const char *)[decodedData.DecodedData bytes]]}];
     }
 }
 
--(void) didReceiveError:(SKTResult)error withMessage:(NSString *)message{
-    RCTLogInfo(message);
-}
-
 -(void)didNotifyArrivalForDevice:(SKTCaptureHelperDevice*) device withResult:(SKTResult) result {
-    if (SKTSUCCESS(result)) {
+    if (SKTSUCCESS(result) && hasListeners) {
         [self sendEventWithName:StatusDeviceChanged body:@{@"status": @"connected"}];
     }
 }
 
 -(void)didNotifyRemovalForDevice:(SKTCaptureHelperDevice*) device withResult:(SKTResult) result {
-    if (SKTSUCCESS(result)) {
+    if (SKTSUCCESS(result) && hasListeners) {
         [self sendEventWithName:StatusDeviceChanged body:@{@"status": @"disconnected"}];
     }
 }
 
-RCT_EXPORT_METHOD(updateStatusFromDevices)
+RCT_EXPORT_METHOD(updateStatusFromDevices: (RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     NSArray* devices = [_capture getDevicesList];
     NSString* newStatus = @"";
@@ -75,7 +78,7 @@ RCT_EXPORT_METHOD(updateStatusFromDevices)
         }
     }
     
-    RCTLogInfo(@"updateStatusFromDevices: %@", newStatus);
+    resolve(newStatus);
 }
 
 @end
