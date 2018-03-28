@@ -1,5 +1,8 @@
 # react-native-socket-mobile
 
+[![CircleCI](https://circleci.com/gh/Traede/react-native-socket-mobile.svg?style=shield)](https://circleci.com/gh/Traede/react-native-socket-mobile) [![Coverage Status](https://coveralls.io/repos/github/Traede/react-native-socket-mobile/badge.svg?branch=master)](https://coveralls.io/github/Traede/react-native-socket-mobile?branch=master)
+[![npm version](https://badge.fury.io/js/react-native-socket-mobile.svg)](https://badge.fury.io/js/react-native-socket-mobile) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 This native module is a wrapper over the [Socket Mobile SDK](https://www.socketmobile.com/developer/portal/welcome). If you have a developer account and valid credentials, you will be able to use your scanner within your React Native application.
 
 ## Table of contents

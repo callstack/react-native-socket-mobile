@@ -5,7 +5,9 @@ import { Alert, Button, StyleSheet, Text, View } from 'react-native';
 // eslint-disable-next-line import/no-unresolved
 import SocketMobile, { STATUS_WAITING } from 'react-native-socket-mobile';
 
-import { bundleId, appKey, developerId } from './secrets';
+const bundleId = 'ADD_YOUR_BUNDLE_ID';
+const appKey = 'ADD_YOUR_APP_KEY';
+const developerId = 'ADD_YOUR_DEVELOPER_ID';
 
 type Props = {};
 

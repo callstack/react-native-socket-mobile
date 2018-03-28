@@ -56,8 +56,5 @@ buck-out/
 */fastlane/Preview.html
 */fastlane/screenshots
 
-# example
-example/secrets.js
-
 # Jest
 coverage/
