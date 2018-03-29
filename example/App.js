@@ -44,18 +44,27 @@ export default class App extends Component<Props, State> {
     this.setListeners();
 
     this.setState({ isBusy: true });
-    await SocketMobile.start({
-      bundleId,
-      developerId,
-      appKey,
-    });
+    try {
+      await SocketMobile.start({
+        bundleId,
+        developerId,
+        appKey,
+      });
+    } catch (e) {
+      // Handle error here
+    }
     this.setState({ isBusy: false });
   };
 
   stopListening = async () => {
     this.setState({ isBusy: true });
 
-    await SocketMobile.stop();
+    try {
+      await SocketMobile.stop();
+    } catch (e) {
+      // Handle error here
+    }
+
     SocketMobile.clearAllListeners();
 
     this.setState({ isBusy: false, lastScan: '--' });

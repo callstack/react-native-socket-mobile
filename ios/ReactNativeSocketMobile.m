@@ -42,7 +42,12 @@ RCT_EXPORT_METHOD(start:(NSString *)bundleId:(NSString *)developerId:(NSString *
     appInfo.AppKey = appKey;
     
     [capture openWithAppInfo:appInfo completionHandler:^(SKTResult result) {
-        resolve(@YES);
+        if (SKTSUCCESS(result)) {
+            resolve(@YES);
+        } else {
+            NSString* code = [NSString stringWithFormat:@"%ld", result];
+            reject(code, @"Start command has failed.", nil);
+        }
     }];
 }
 
@@ -52,7 +57,12 @@ RCT_EXPORT_METHOD(stop: (RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseReje
     SKTCaptureHelper* capture = [SKTCaptureHelper sharedInstance];
     [capture popDelegate:weakSelf];
     [capture closeWithCompletionHandler :^(SKTResult result) {
-        resolve(@YES);
+        if (SKTSUCCESS(result)) {
+            resolve(@YES);
+        } else {
+            NSString* code = [NSString stringWithFormat:@"%ld", result];
+            reject(code, @"Stop command has failed.", nil);
+        }
     }];
 }
 

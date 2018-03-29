@@ -1,6 +1,6 @@
 {
   "name": "react-native-socket-mobile",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "React Native Socket Mobile for https://www.socketmobile.com/developers",
   "author": "Ferran Negre <fnp.developer@gmail.com>",
   "main": "index.js",
