@@ -30,7 +30,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 
 platform :ios, '9.0'
 
-target 'SocketMobileExample' do
+target 'YourAppName' do
   node_modules_path = '../node_modules'
 
   pod 'yoga', path: "#{node_modules_path}/react-native/ReactCommon/yoga/yoga.podspec"
@@ -49,6 +49,11 @@ end
 ```
 4. Run `pod install`.
 5. Open <YOUR_PROJECT_NAME>.xcworkspace file (you'll need to use it as a starting file from now on).
+6. **Important**: You need to add the following to your XCode project:
+
+| Info        |            |
+| ------------- |:-------------:|
+| Supported external accessory protocols      | com.socketmobile.chs |
 
 ### Android
 
