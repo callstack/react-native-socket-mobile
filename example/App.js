@@ -53,7 +53,6 @@ export default class App extends Component<Props, State> {
     } catch (e) {
       // Handle error here
     }
-    this.setState({ isBusy: false });
   };
 
   stopListening = async () => {
@@ -63,17 +62,16 @@ export default class App extends Component<Props, State> {
       await SocketMobile.stop();
     } catch (e) {
       // Handle error here
+    } finally {
+      SocketMobile.clearAllListeners();
+      this.setState({ isBusy: false, lastScan: '--' });
     }
-
-    SocketMobile.clearAllListeners();
-
-    this.setState({ isBusy: false, lastScan: '--' });
   };
 
   setListeners = () => {
     SocketMobile.setDeviceStatusListener(status => {
       if (status === 'connected') {
-        this.setState({ status: 'connected' });
+        this.setState({ status: 'connected', isBusy: false });
       } else {
         this.setState({ status: 'disconnected' });
       }
