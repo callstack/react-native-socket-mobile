@@ -4,7 +4,7 @@
   "description": "React Native Socket Mobile for https://www.socketmobile.com/developers",
   "author": "Ferran Negre <fnp.developer@gmail.com>",
   "main": "index.js",
-  "homepage": "https://github.com/Traede/react-native-socket-mobile",
+  "homepage": "https://github.com/callstack/react-native-socket-mobile",
   "license": "MIT",
   "files": [
     "ios/",
