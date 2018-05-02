@@ -6,7 +6,7 @@ RCT_EXPORT_MODULE();
 
 NSString *DecodedData = @"DecodedData";
 NSString *StatusDeviceChanged = @"StatusDeviceChanged";
-bool hasListeners;
+static bool hasListeners;
 
 + (id)allocWithZone:(NSZone *)zone {
     static ReactNativeSocketMobile *sharedInstance = nil;
