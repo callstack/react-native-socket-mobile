@@ -15,7 +15,6 @@ Pod::Spec.new do |s|
   s.source_files  = "*.{h,m}"
   s.requires_arc = true
 
-  s.dependency "React"
   s.dependency "SKTCaptureObjC", "~> 1.0"
 
 end
