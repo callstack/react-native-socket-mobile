@@ -36,7 +36,7 @@ target 'YourAppName' do
   pod 'yoga', path: "#{node_modules_path}/react-native/ReactCommon/yoga/yoga.podspec"
   pod 'React', path: "#{node_modules_path}/react-native"
 
-  pod 'ReactNativeSocketMobile', path: path: "#{node_modules_path}/react-native-socket-mobile/ios"
+  pod 'ReactNativeSocketMobile', path: "#{node_modules_path}/react-native-socket-mobile/ios"
 end
 
 post_install do |installer|
