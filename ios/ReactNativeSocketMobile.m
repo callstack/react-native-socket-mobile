@@ -37,7 +37,7 @@ RCT_EXPORT_METHOD(start:(NSString *)bundleId:(NSString *)developerId:(NSString *
     [capture pushDelegate:weakSelf];
     
     SKTAppInfo* appInfo = [SKTAppInfo new];
-    appInfo.BundleID = bundleId;
+    appInfo.AppID = bundleId;
     appInfo.DeveloperID = developerId;
     appInfo.AppKey = appKey;
     
