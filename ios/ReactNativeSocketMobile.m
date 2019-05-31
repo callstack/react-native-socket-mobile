@@ -6,7 +6,7 @@ RCT_EXPORT_MODULE();
 
 NSString *DecodedData = @"DecodedData";
 NSString *StatusDeviceChanged = @"StatusDeviceChanged";
-bool hasListeners;
+bool socketMobileHasListeners;
 
 + (id)allocWithZone:(NSZone *)zone {
     static ReactNativeSocketMobile *sharedInstance = nil;
@@ -23,11 +23,11 @@ bool hasListeners;
 }
 
 -(void)startObserving {
-    hasListeners = YES;
+    socketMobileHasListeners = YES;
 }
 
 -(void)stopObserving {
-    hasListeners = NO;
+    socketMobileHasListeners = NO;
 }
 
 RCT_EXPORT_METHOD(start:(NSString *)bundleId:(NSString *)developerId:(NSString *)appKey resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
@@ -37,7 +37,7 @@ RCT_EXPORT_METHOD(start:(NSString *)bundleId:(NSString *)developerId:(NSString *
     [capture pushDelegate:weakSelf];
     
     SKTAppInfo* appInfo = [SKTAppInfo new];
-    appInfo.BundleID = bundleId;
+    appInfo.AppID = bundleId;
     appInfo.DeveloperID = developerId;
     appInfo.AppKey = appKey;
     
@@ -67,19 +67,19 @@ RCT_EXPORT_METHOD(stop: (RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseReje
 }
 
 -(void)didReceiveDecodedData:(SKTCaptureDecodedData*) decodedData fromDevice:(SKTCaptureHelperDevice*) device withResult:(SKTResult) result{
-    if (SKTSUCCESS(result) && hasListeners) {
+    if (SKTSUCCESS(result) && socketMobileHasListeners) {
         [self sendEventWithName:DecodedData body:@{@"data": [NSString stringWithUTF8String:(const char *)[decodedData.DecodedData bytes]]}];
     }
 }
 
 -(void)didNotifyArrivalForDevice:(SKTCaptureHelperDevice*) device withResult:(SKTResult) result {
-    if (SKTSUCCESS(result) && hasListeners) {
+    if (SKTSUCCESS(result) && socketMobileHasListeners) {
         [self sendEventWithName:StatusDeviceChanged body:@{@"status": @"connected"}];
     }
 }
 
 -(void)didNotifyRemovalForDevice:(SKTCaptureHelperDevice*) device withResult:(SKTResult) result {
-    if (SKTSUCCESS(result) && hasListeners) {
+    if (SKTSUCCESS(result) && socketMobileHasListeners) {
         [self sendEventWithName:StatusDeviceChanged body:@{@"status": @"disconnected"}];
     }
 }
