@@ -68,7 +68,7 @@ RCT_EXPORT_METHOD(stop: (RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseReje
 
 -(void)didReceiveDecodedData:(SKTCaptureDecodedData*) decodedData fromDevice:(SKTCaptureHelperDevice*) device withResult:(SKTResult) result{
     if (SKTSUCCESS(result) && socketMobileHasListeners) {
-        [self sendEventWithName:DecodedData body:@{@"data": [NSString stringWithUTF8String:(const char *)[decodedData.DecodedData bytes]]}];
+        [self sendEventWithName:DecodedData body: @{@"data": decodedData.stringFromDecodedData}];
     }
 }
 
